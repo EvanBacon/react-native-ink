@@ -1,0 +1,9 @@
+{
+  "extends": "@expo/babel-preset-cli/tsconfig.base",
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "compilerOptions": {
+    "outDir": "build",
+    "jsx": "preserve",
+    "rootDir": "src"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "expo": {
+    "name": "example",
+    "platforms": ["cli"],
+    "icon": "./assets/icon.png"
+  }
+}

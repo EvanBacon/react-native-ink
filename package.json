@@ -1,0 +1,72 @@
+{
+  "name": "react-native-ink",
+  "version": "0.0.0",
+  "description": "React Native for CLIs",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "sync-example": "cp -a build/ example/node_modules/expo-three/build/",
+    "tslint": "tslint --config tslint.json --project tsconfig.json"
+  },
+  "homepage": "https://github.com/evanbacon/react-native-ink#readme",
+  "bugs": {
+    "url": "https://github.com/evanbacon/react-native-ink/issues"
+  },
+  "author": "Evan Bacon <bacon@expo.io> (https://github.com/evanbacon)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/evanbacon/react-native-ink.git"
+  },
+  "contributors": [
+    "Evan Bacon <bacon@expo.io> (https://github.com/evanbacon)"
+  ],
+  "license": "MIT",
+  "tags": [
+    "react"
+  ],
+  "keywords": [
+    "react",
+    "react-component",
+    "react-native",
+    "react-native-cli",
+    "react-ink",
+    "expo",
+    "cli"
+  ],
+  "dependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/node": "^12.6.8",
+    "@types/react": "^16.8.23",
+    "@typescript-eslint/eslint-plugin": "^1.12.0",
+    "@typescript-eslint/parser": "^1.12.0",
+    "@zeit/ncc": "^0.20.4",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.2",
+    "ink": "^2.5.0",
+    "ink-image": "^2.0.0",
+    "ink-text-input": "^3.2.1",
+    "nexe": "^3.3.2",
+    "prettier": "^1.18.2",
+    "react": "^16.8.6",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "tslint-react": "^4.0.0",
+    "typescript": "^3.5.3"
+  },
+  "devDependencies": {
+    "expo-module-scripts": "^1.1.0",
+    "jest-expo": "^34.1.0"
+  }
+}

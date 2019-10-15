@@ -1,0 +1,21 @@
+{
+  "main": "build/index",
+  "scripts": {
+    "start": "node build/index.js",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "react": "16.8.3"
+  },
+  "devDependencies": {
+    "@expo/babel-preset-cli": "^0.2.0",
+    "@types/node": "^12.7.12",
+    "@types/react": "^16.8.23",
+    "@types/react-native": "^0.57.65",
+    "babel-preset-expo": "^6.0.0",
+    "child_process": "^1.0.2",
+    "expo-module-scripts": "^1.1.1",
+    "npm-package-arg": "^6.1.1",
+    "typescript": "^3.4.5"
+  }
+}
