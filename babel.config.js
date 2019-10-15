@@ -1,6 +1,6 @@
 module.exports = function(api) {
   api.cache(true);
   return {
-    presets: ['@expo/babel-preset-cli'],
+    presets: ['@expo/babel-preset-cli', '@babel/preset-react'],
   };
 };

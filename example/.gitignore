@@ -10,4 +10,5 @@ npm-debug.*
 web-build/
 web-report/
 
+/build/
 tsconfig.tsbuildinfo

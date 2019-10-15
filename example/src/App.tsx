@@ -1,22 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View } from 'react-native';
+// import { AppRegistry } from 'react-native';
+// import App from './App';
 
-export default () => {
-  const [counter, setCounter] = useState(0);
+import React, { FunctionComponent } from 'react';
+import { Box, Color, Text, useInput } from 'ink';
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCounter(prevCounter => prevCounter + 1);
-    });
-
-    return () => {
-      clearInterval(timer);
-    };
+interface IProps {
+  name?: string;
+}
+const InkBoilerplate: FunctionComponent<IProps> = ({ name = 'Someone' }) => {
+  useInput(input => {
+    if (input === 'q') {
+      process.exit(0);
+    }
   });
 
   return (
-    <View style={{ padding: 1 }}>
-      <Text style={{ color: 'green' }}>{counter} tests passed</Text>
-    </View>
+    <>
+      <Box>
+        <Text>
+          Hello, {name}. <Color green>From Ink Boilerplate></Color>
+        </Text>
+      </Box>
+      <Box marginTop={1}>
+        <Color redBright>Press 'q' for exit</Color>
+      </Box>
+    </>
   );
 };
+
+export default InkBoilerplate;
+
+// import { Box, Color, Text } from 'ink';
+// import React from 'react';
+
+// class InkBoilerplate extends React.Component {
+//   render() {
+//     return (
+//       <>
+//         <Box>
+//           <Text>
+//             Hello, <Color green>From Ink Boilerplate></Color>
+//           </Text>
+//         </Box>
+//         <Box marginTop={1}>
+//           <Color redBright>Press 'q' for exit</Color>
+//         </Box>
+//       </>
+//     );
+//   }
+// }
+
+// export default InkBoilerplate;

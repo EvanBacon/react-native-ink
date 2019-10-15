@@ -4,14 +4,13 @@
   "description": "React Native for CLIs",
   "main": "build/index.js",
   "scripts": {
-    "build": "expo-module build",
-    "clean": "expo-module clean",
-    "test": "expo-module test",
-    "prepare": "expo-module prepare",
-    "prepublishOnly": "expo-module prepublishOnly",
-    "expo-module": "expo-module",
-    "sync-example": "cp -a build/ example/node_modules/expo-three/build/",
-    "tslint": "tslint --config tslint.json --project tsconfig.json"
+    "build": "tsc -d",
+    "clean": "rm -rf build/",
+    "coverage": "yarn codecov",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build",
+    "pretest": "npm run build",
+    "test": "jest"
   },
   "homepage": "https://github.com/evanbacon/react-native-ink#readme",
   "bugs": {
@@ -38,12 +37,18 @@
     "expo",
     "cli"
   ],
+  "peerDependencies": {
+    "ink": "^2.5.0",
+    "react": "^16.10.1"
+  },
   "dependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
+    "@expo/babel-preset-cli": "^0.2.1",
+    "@types/meow": "^5.0.0",
     "@types/node": "^12.6.8",
     "@types/react": "^16.8.23",
     "@typescript-eslint/eslint-plugin": "^1.12.0",
@@ -53,12 +58,11 @@
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.2",
-    "ink": "^2.5.0",
     "ink-image": "^2.0.0",
     "ink-text-input": "^3.2.1",
+    "meow": "^5.0.0",
     "nexe": "^3.3.2",
     "prettier": "^1.18.2",
-    "react": "^16.8.6",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
@@ -66,6 +70,8 @@
     "typescript": "^3.5.3"
   },
   "devDependencies": {
+    "ink": "^2.5.0",
+    "react": "^16.10.1",
     "expo-module-scripts": "^1.1.0",
     "jest-expo": "^34.1.0"
   }

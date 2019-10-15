@@ -6,3 +6,6 @@ example/
 babel.config.js
 /src
 /tsconfig.json
+/scripts
+/jest.config.js
+__tests__

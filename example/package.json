@@ -1,21 +1,50 @@
 {
+  "name": "example",
+  "private": true,
+  "bin": {
+    "inkboilerplate": "build/bin.js"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "_moduleAliases": {
+    "react-native": "react-native-ink"
+  },
   "main": "build/index",
   "scripts": {
-    "start": "node build/index.js",
-    "build": "tsc"
+    "build": "tsc -d",
+    "coverage": "yarn codecov",
+    "dev": "ts-node --files src/bin.tsx",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build",
+    "pretest": "npm run build",
+    "test": "jest"
   },
   "dependencies": {
-    "react": "16.8.3"
+    "ink": "^2.4.0",
+    "meow": "^5.0.0",
+    "module-alias": "^2.2.2",
+    "react": "^16.10.1",
+    "react-native-ink": "../react-native-ink-v0.0.0.tgz",
+    "update-notifier": "^3.0.1"
   },
   "devDependencies": {
-    "@expo/babel-preset-cli": "^0.2.0",
-    "@types/node": "^12.7.12",
-    "@types/react": "^16.8.23",
-    "@types/react-native": "^0.57.65",
-    "babel-preset-expo": "^6.0.0",
-    "child_process": "^1.0.2",
-    "expo-module-scripts": "^1.1.1",
-    "npm-package-arg": "^6.1.1",
-    "typescript": "^3.4.5"
+    "@types/ink": "0.5.2",
+    "@types/ink-testing-library": "1.0.0",
+    "@types/jest": "24.0.18",
+    "@types/meow": "5.0.0",
+    "@types/node": "12.7.8",
+    "@types/react": "16.9.3",
+    "@types/update-notifier": "2.5.0",
+    "codecov": "3.6.1",
+    "husky": "3.0.7",
+    "ink-testing-library": "1.0.2",
+    "jest": "24.9.0",
+    "jest-serializer-ansi": "1.0.3",
+    "prettier": "1.18.2",
+    "pretty-quick": "1.11.1",
+    "ts-jest": "24.1.0",
+    "ts-node": "8.4.1",
+    "typescript": "3.6.3"
   }
 }

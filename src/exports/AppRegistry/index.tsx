@@ -1,7 +1,10 @@
-import { ComponentType } from 'react';
-import { render } from 'ink';
+#!/usr/bin/env node
 
-const runnables = {};
+import React, { ComponentType } from 'react';
+import { render } from 'ink';
+import meow from 'meow';
+
+const runnables: { [key: string]: any } = {};
 
 export type ComponentProvider = () => ComponentType<any>;
 export type ComponentProviderInstrumentationHook = (
@@ -33,8 +36,7 @@ export default class AppRegistry {
     componentProvider: ComponentProvider,
   ): string {
     const App = componentProvider();
-    render(<App />);
-
+    runnables[appKey] = App;
     return appKey;
   }
 
@@ -49,7 +51,9 @@ export default class AppRegistry {
   }
 
   static runApplication(appKey: string, appParameters: Object): void {
-    throw new Error('NO_IMP');
+    const cli = meow(appParameters);
+    const App = runnables[appKey];
+    render(React.createElement(App, cli.flags));
   }
 
   static setComponentProviderInstrumentationHook(
