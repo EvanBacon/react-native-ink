@@ -1,8 +1,9 @@
-// import { AppRegistry } from 'react-native';
-// import App from './App';
-
 import React, { FunctionComponent } from 'react';
-import { Box, Color, Text, useInput } from 'ink';
+import { Color, useInput } from 'ink';
+// @ts-ignore
+import { Text, View } from 'react-native-ink';
+// @ts-ignore
+// import { View } from 'react-native-web';
 
 interface IProps {
   name?: string;
@@ -16,38 +17,14 @@ const InkBoilerplate: FunctionComponent<IProps> = ({ name = 'Someone' }) => {
 
   return (
     <>
-      <Box>
-        <Text>
-          Hello, {name}. <Color green>From Ink Boilerplate></Color>
-        </Text>
-      </Box>
-      <Box marginTop={1}>
+      <View style={{ padding: 1, backgroundColor: 'red' }}>
+        <Text style={{ color: 'orange' }}>Hello, {name}.</Text>
+      </View>
+      <View marginTop={1}>
         <Color redBright>Press 'q' for exit</Color>
-      </Box>
+      </View>
     </>
   );
 };
 
 export default InkBoilerplate;
-
-// import { Box, Color, Text } from 'ink';
-// import React from 'react';
-
-// class InkBoilerplate extends React.Component {
-//   render() {
-//     return (
-//       <>
-//         <Box>
-//           <Text>
-//             Hello, <Color green>From Ink Boilerplate></Color>
-//           </Text>
-//         </Box>
-//         <Box marginTop={1}>
-//           <Color redBright>Press 'q' for exit</Color>
-//         </Box>
-//       </>
-//     );
-//   }
-// }
-
-// export default InkBoilerplate;

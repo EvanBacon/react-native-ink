@@ -7,10 +7,11 @@
     "build": "tsc -d",
     "clean": "rm -rf build/",
     "coverage": "yarn codecov",
-    "prepack": "npm run build",
-    "prepublishOnly": "npm run build",
-    "pretest": "npm run build",
-    "test": "jest"
+    "prepack": "yarn build",
+    "prepublishOnly": "yarn build",
+    "pretest": "yarn build",
+    "test": "jest",
+    "sync": "yarn build && cp -a build/ example/node_modules/react-native-ink/build/"
   },
   "homepage": "https://github.com/evanbacon/react-native-ink#readme",
   "bugs": {
@@ -54,15 +55,19 @@
     "@typescript-eslint/eslint-plugin": "^1.12.0",
     "@typescript-eslint/parser": "^1.12.0",
     "@zeit/ncc": "^0.20.4",
+    "arrify": "^2.0.1",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.2",
+    "fbjs": "^1.0.0",
     "ink-image": "^2.0.0",
     "ink-text-input": "^3.2.1",
     "meow": "^5.0.0",
     "nexe": "^3.3.2",
+    "normalize-css-color": "^1.0.2",
     "prettier": "^1.18.2",
+    "react-native-web": "^0.11.7",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
@@ -70,9 +75,9 @@
     "typescript": "^3.5.3"
   },
   "devDependencies": {
-    "ink": "^2.5.0",
-    "react": "^16.10.1",
     "expo-module-scripts": "^1.1.0",
-    "jest-expo": "^34.1.0"
+    "ink": "^2.5.0",
+    "jest-expo": "^34.1.0",
+    "react": "^16.10.1"
   }
 }

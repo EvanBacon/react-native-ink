@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import InkBoilerplate from './App';
 
+// @ts-ignore
 import { AppRegistry } from 'react-native-ink';
 
 AppRegistry.registerComponent('main', () => InkBoilerplate);
