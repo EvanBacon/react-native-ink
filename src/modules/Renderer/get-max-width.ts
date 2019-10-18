@@ -1,8 +1,8 @@
-import { YogaNode, EDGE_HORIZONTAL } from 'yoga-layout-prebuilt';
+import Yoga from '../Yoga';
 
-export default (yogaNode: YogaNode) => {
+export default (yogaNode: Yoga.YogaNode) => {
   return (
     yogaNode.getComputedWidth() -
-    yogaNode.getComputedPadding(EDGE_HORIZONTAL) * 2
+    yogaNode.getComputedPadding(Yoga.EDGE_HORIZONTAL) * 2
   );
 };

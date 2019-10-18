@@ -1,4 +1,4 @@
-import Yoga from 'yoga-layout-prebuilt';
+import Yoga from '../Yoga';
 import applyStyles from './apply-styles';
 import measureText from './measure-text';
 import { CLIElement } from './DOM';

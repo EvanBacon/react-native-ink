@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+// @ts-ignore
 import cliCursor from 'cli-cursor';
 import AppContext from './AppContext';
 import StdinContext from './StdinContext';

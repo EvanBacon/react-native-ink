@@ -1,4 +1,4 @@
-import Yoga from 'yoga-layout-prebuilt';
+import Yoga from '../Yoga';
 
 const applyPositionStyles = (node: Yoga.YogaNode, style: any) => {
   if (!style.position) {

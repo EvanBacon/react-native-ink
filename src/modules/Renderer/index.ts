@@ -1,4 +1,4 @@
-import Yoga from 'yoga-layout-prebuilt';
+import Yoga from '../Yoga';
 
 import calculateWrappedText from './calculate-wrapped-text';
 import { CLIElement, setStyle } from './DOM';

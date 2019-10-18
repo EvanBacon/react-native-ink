@@ -4,6 +4,7 @@ import autoBind from 'auto-bind';
 import logUpdate from 'log-update';
 import isCI from 'is-ci';
 import signalExit from 'signal-exit';
+// @ts-ignore
 import ansiEscapes from 'ansi-escapes';
 import reconciler from '../Renderer/reconciler';
 import experimentalReconciler from '../Renderer/reconciler';
@@ -11,7 +12,7 @@ import createRenderer from '../Renderer';
 import * as dom from '../Renderer/DOM';
 import * as experimentalDom from '../Renderer/DOM';
 import instances from './instances';
-import App from '../exports/App';
+import App from '../../exports/App';
 import { OpaqueRoot } from 'react-reconciler';
 
 export default class Instance {

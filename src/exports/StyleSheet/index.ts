@@ -17,4 +17,9 @@
 
 // export default StyleSheet;
 
-export default {};
+export default {
+  flatten(props: any | any[]): any {
+    console.warn('StyleSheet.flatten is NO_IMP');
+    return {};
+  },
+};

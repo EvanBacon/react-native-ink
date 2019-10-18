@@ -1,4 +1,4 @@
-import Yoga from 'yoga-layout-prebuilt';
+import Yoga from '../Yoga';
 import measureText from './measure-text';
 import applyStyle from './apply-styles';
 
@@ -7,7 +7,7 @@ export type CLIElementStyle = { [key: string]: any };
 export type CLIElement = {
   onImmediateRender?: Function;
   onRender?: Function;
-  unstable__transformChildren?: Function;
+  unstable__transformChildren?: any;
   isStaticDirty?: boolean;
   unstable__static?: boolean;
   nodeName: string;

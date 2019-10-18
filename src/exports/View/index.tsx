@@ -10,9 +10,6 @@ import React, {
 
 import ViewPropTypes from './ViewPropTypes';
 
-// @ts-ignore
-const Div = div;
-
 const ViewRef: RefForwardingComponent<any, any> = (
   { children, unstable__transformChildren, style }: any,
   ref: Ref<any>,
@@ -29,15 +26,13 @@ const ViewRef: RefForwardingComponent<any, any> = (
     },
   }));
 
-  return (
-    <Div
-      ref={nodeRef}
-      style={style}
-      unstable__transformChildren={unstable__transformChildren}
-    >
-      {children}
-    </Div>
-  );
+  const props: any = {
+    ref: nodeRef,
+    style,
+    unstable__transformChildren,
+  };
+
+  return <div {...props}>{children}</div>;
 };
 
 const View: any = forwardRef(ViewRef);

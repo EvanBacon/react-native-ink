@@ -4,6 +4,7 @@
   "description": "React Native for CLIs",
   "main": "build/index.js",
   "scripts": {
+    "dev": "yarn ts-node --files ./Example-node.tsx",
     "build": "tsc -d",
     "clean": "rm -rf build/",
     "coverage": "yarn codecov",
@@ -102,6 +103,7 @@
     "expo-module-scripts": "^1.1.0",
     "ink": "^2.5.0",
     "jest-expo": "^34.1.0",
-    "react": "^16.10.1"
+    "react": "^16.10.1",
+    "ts-node": "^8.4.1"
   }
 }

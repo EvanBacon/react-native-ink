@@ -1,16 +1,9 @@
 import widestLine from 'widest-line';
 import wrapText from './wrap-text';
 import getMaxWidth from './get-max-width';
-import Yoga from 'yoga-layout-prebuilt';
+import { CLIElement } from './DOM';
 
-type Node = {
-  yogaNode: Yoga.YogaNode;
-  nodeName?: string;
-  textContent?: string;
-  childNodes: Node[];
-};
-
-const isAllTextNodes = (node: Node) => {
+const isAllTextNodes = (node: CLIElement) => {
   if (node.nodeName === '#text') {
     return true;
   }
@@ -34,7 +27,7 @@ const isAllTextNodes = (node: Node) => {
 //
 // Also, this is necessary for libraries like ink-link (https://github.com/sindresorhus/ink-link),
 // which need to wrap all children at once, instead of wrapping 3 text nodes separately.
-const squashTextNodes = (node: Node) => {
+const squashTextNodes = (node: CLIElement) => {
   // If parent container is `<Box>`, text nodes will be treated as separate nodes in
   // the tree and will have their own coordinates in the layout.
   // To ensure text nodes are aligned correctly, take X and Y of the first text node
@@ -71,9 +64,9 @@ const squashTextNodes = (node: Node) => {
 
 // After nodes are laid out, render each to output object, which later gets rendered to terminal
 const renderNodeToOutput = (
-  node,
-  output,
-  { offsetX = 0, offsetY = 0, transformers = [], skipStaticElements },
+  node: CLIElement,
+  output: any,
+  { offsetX = 0, offsetY = 0, transformers = [], skipStaticElements }: any,
 ) => {
   if (node.unstable__static && skipStaticElements) {
     return;
@@ -98,7 +91,11 @@ const renderNodeToOutput = (
 
     // Since text nodes are always wrapped in an additional node, parent node
     // is where we should look for attributes
-    if (node.parentNode.style.textWrap) {
+    if (
+      node.parentNode &&
+      node.parentNode.style &&
+      node.parentNode.style.textWrap
+    ) {
       const currentWidth = widestLine(text);
       const maxWidth = getMaxWidth(node.parentNode.yogaNode);
 
@@ -121,12 +118,12 @@ const renderNodeToOutput = (
 
   // Nodes that have other nodes as children
   if (Array.isArray(node.childNodes) && node.childNodes.length > 0) {
-    const isFlexDirectionRow = node.style.flexDirection === 'row';
+    const isFlexDirectionRow = node.style && node.style.flexDirection === 'row';
 
     if (isFlexDirectionRow && node.childNodes.every(isAllTextNodes)) {
       let text = squashTextNodes(node);
 
-      if (node.style.textWrap) {
+      if (node.style && node.style.textWrap) {
         const currentWidth = widestLine(text);
         const maxWidth = getMaxWidth(yogaNode);
 

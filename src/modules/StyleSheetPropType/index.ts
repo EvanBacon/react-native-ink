@@ -9,7 +9,8 @@
  */
 
 import createStrictShapeTypeChecker from '../createStrictShapeTypeChecker';
-import StyleSheet from '../../exports/StyleSheet';
+
+import StyleSheet from '../../exports/StyleSheet/index';
 type ReactPropsCheckType = any;
 
 function StyleSheetPropType(shape: {

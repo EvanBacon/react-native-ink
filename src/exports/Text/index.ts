@@ -9,7 +9,7 @@
  */
 import chalk from 'chalk';
 import { bool } from 'prop-types';
-import { Component } from 'react';
+import React, { Component } from 'react';
 
 import createElement from '../../components/createElement';
 // @ts-ignore
@@ -31,58 +31,6 @@ function asArray(value: any): string[] {
   }
   return asArray([value]);
 }
-
-const transformChildren = ({
-  children,
-  unstable__transformChildren,
-  style: {
-    color,
-    backgroundColor,
-    fontWeight,
-    textDecorationStyle,
-    textDecorationLine,
-    textDecorationColor,
-    fontStyle,
-  } = {},
-}: {
-  [key: string]: any;
-  style: any;
-}) => {
-  const _color = normalizeColor(color);
-  console.log('Text.color', color, '>>>', _color);
-  if (_color) {
-    // @ts-ignore
-    children = chalk.rgb(..._color)(children);
-  }
-  const _backgroundColor = normalizeColor(backgroundColor);
-  console.log('Text.backgroundColor', backgroundColor, '>>>', _backgroundColor);
-  if (_backgroundColor) {
-    // @ts-ignore
-    children = chalk.bgRgb(..._backgroundColor)(children);
-  }
-
-  if (asArray(fontWeight).includes('bold')) {
-    children = chalk.bold(children);
-  }
-
-  if (['italic', 'oblique'].includes(fontStyle)) {
-    children = chalk.italic(children);
-  }
-
-  const _textDecorationStyle = asArray(textDecorationStyle);
-  if (_textDecorationStyle.includes('underline')) {
-    children = chalk.underline(children);
-  }
-  if (_textDecorationStyle.includes('line-through')) {
-    children = chalk.strikethrough(children);
-  }
-
-  if (unstable__transformChildren) {
-    children = unstable__transformChildren(children);
-  }
-
-  return children;
-};
 
 class Text extends Component<any> {
   static displayName = 'Text';
@@ -137,8 +85,74 @@ class Text extends Component<any> {
 
     const component = isInAParentText ? 'span' : 'div';
 
-    const children = transformChildren(this.props as any);
-    return createElement(component, { ...otherProps, children });
+    const transformChildren = (children: string) => {
+      // console.log('BACONCONC', props);
+      const {
+        // children,
+        unstable__transformChildren,
+        style: {
+          color,
+          backgroundColor,
+          fontWeight,
+          textDecorationStyle,
+          textDecorationLine,
+          textDecorationColor,
+          fontStyle,
+        } = {} as any,
+      } = this.props as {
+        [key: string]: any;
+        style: any;
+      };
+
+      const _color = normalizeColor(color);
+      console.log('Text.color', color, '>>>', _color);
+      if (_color) {
+        // @ts-ignore
+        children = chalk.rgb(..._color)(children);
+      }
+      const _backgroundColor = normalizeColor(backgroundColor);
+      console.log(
+        'Text.backgroundColor',
+        backgroundColor,
+        '>>>',
+        _backgroundColor,
+      );
+      if (_backgroundColor) {
+        // @ts-ignore
+        children = chalk.bgRgb(..._backgroundColor)(children);
+      }
+
+      if (asArray(fontWeight).includes('bold')) {
+        children = chalk.bold(children);
+      }
+
+      if (['italic', 'oblique'].includes(fontStyle)) {
+        children = chalk.italic(children);
+      }
+
+      const _textDecorationStyle = asArray(textDecorationStyle);
+      if (_textDecorationStyle.includes('underline')) {
+        children = chalk.underline(children);
+      }
+      if (_textDecorationStyle.includes('line-through')) {
+        children = chalk.strikethrough(children);
+      }
+
+      if (unstable__transformChildren) {
+        children = unstable__transformChildren(children);
+      }
+
+      return children;
+    };
+
+    // const children = transformChildren(this.props as any);
+    // return createElement(component, {
+    return React.createElement(component, {
+      ...otherProps,
+      unstable__transformChildren: transformChildren,
+      style: { flexDirection: 'row' },
+      // children,
+    });
   }
 
   _createEnterHandler(fn: any) {
