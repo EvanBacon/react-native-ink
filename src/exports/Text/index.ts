@@ -7,24 +7,24 @@
  *
  * @flow
  */
+import chalk from 'chalk';
+import { bool } from 'prop-types';
+import { Component } from 'react';
+
+import createElement from '../../components/createElement';
+// @ts-ignore
+import warning from 'fbjs/lib/warning';
+import normalizeColor from '../../modules/normalizeColor';
 
 // import applyLayout from '../../modules/applyLayout';
 // import applyNativeMethods from '../../modules/applyNativeMethods';
-import { bool } from 'prop-types';
-import { Component } from 'react';
-import createElement from '../createElement';
 // import arrify from 'arrify';
-
-import normalizeColor from '../../modules/normalizeColor';
 
 // import css from '../StyleSheet/css';
 
 // @ts-ignore
-import warning from 'fbjs/lib/warning';
 // import StyleSheet from '../StyleSheet';
 // import TextPropTypes from './TextPropTypes';
-import chalk from 'chalk';
-
 function asArray(value: any): string[] {
   if (Array.isArray(value)) {
     return value.filter(Boolean);

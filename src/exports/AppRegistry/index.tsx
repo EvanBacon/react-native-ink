@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import React, { ComponentType } from 'react';
-import { render } from 'ink';
 import meow from 'meow';
 
 const runnables: { [key: string]: any } = {};
@@ -18,6 +17,9 @@ export type AppConfig = {
   run?: Function;
   section?: boolean;
 };
+
+import Instance from '../../Modules/Instance';
+import instances from '../../Modules/Instance/instances';
 
 /**
  * `AppRegistry` is the JS entry point to running all React Native apps.
@@ -50,10 +52,45 @@ export default class AppRegistry {
     return appKey;
   }
 
-  static runApplication(appKey: string, appParameters: Object): void {
+  static runApplication(appKey: string, appParameters: Object): any {
     const cli = meow(appParameters);
     const App = runnables[appKey];
-    render(React.createElement(App, cli.flags));
+    const node = React.createElement(App, cli.flags);
+    let options: any = {};
+
+    // Stream was passed instead of `options` object
+    if (typeof options.write === 'function') {
+      options = {
+        stdout: options,
+        stdin: process.stdin,
+      };
+    }
+
+    options = {
+      stdout: process.stdout,
+      stdin: process.stdin,
+      debug: false,
+      exitOnCtrlC: true,
+      experimental: false,
+      ...options,
+    };
+
+    let instance: any;
+    if (instances.has(options.stdout)) {
+      instance = instances.get(options.stdout);
+    } else {
+      instance = new Instance(options);
+      instances.set(options.stdout, instance);
+    }
+
+    instance.render(node);
+
+    return {
+      rerender: instance.render,
+      unmount: () => instance.unmount(),
+      waitUntilExit: instance.waitUntilExit,
+      cleanup: () => instances.delete(options.stdout),
+    };
   }
 
   static setComponentProviderInstrumentationHook(
