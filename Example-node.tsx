@@ -1,25 +1,29 @@
 #!/usr/bin/env node
-import { Color, useInput } from 'ink';
 import React from 'react';
 
-import { AppRegistry, Text, View } from './build';
+import { AppRegistry, Text } from './build';
 
 const InkBoilerplate = ({ name = 'Someone' }) => {
-  useInput(input => {
-    if (input === 'q') {
-      process.exit(0);
-    }
-  });
-
   return (
-    <View>
-      <View style={{ padding: 1, backgroundColor: 'red' }}>
-        <Text style={{ color: 'orange' }}>Hello, {name}.</Text>
-      </View>
-      <View marginTop={1}>
-        <Color redBright>Press 'q' for exit</Color>
-      </View>
-    </View>
+    <Text
+      style={{
+        backgroundColor: 'blue',
+        padding: 2,
+        paddingRight: 1,
+        margin: 1,
+        marginTop: 3,
+        marginLeft: 2,
+        color: 'orange',
+        textAlign: 'right',
+        fontStyle: 'oblique',
+        borderRightColor: 'cyan',
+        borderTopColor: 'yellow',
+        textDecorationStyle: 'underline',
+        borderColor: 'purple',
+      }}
+    >
+      Hello, {name}.
+    </Text>
   );
 };
 

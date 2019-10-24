@@ -105,7 +105,6 @@ const renderNodeToOutput = (
         });
       }
     }
-
     output.write(x, y, text, { transformers: newTransformers });
     return;
   }
@@ -133,11 +132,9 @@ const renderNodeToOutput = (
           });
         }
       }
-
       output.write(x, y, text, { transformers: newTransformers });
       return;
     }
-
     for (const childNode of node.childNodes) {
       renderNodeToOutput(childNode, output, {
         offsetX: x,
