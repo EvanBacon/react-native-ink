@@ -149,46 +149,38 @@ function resolveColor(style: any, stylePropKey: string): number[] | null {
   return null;
 }
 
-const DEFAULT_COLOR = [0, 0, 0];
+const BORDER_COLOR_STYLES = [
+  'borderTopColor',
+  'borderBottomColor',
+  'borderLeftColor',
+  'borderRightColor',
+];
 function borderColorFromStyle(
   style: any,
-): { top: number[]; left: number[]; bottom: number[]; right: number[] } {
+): {
+  top: number[] | undefined;
+  left: number[] | undefined;
+  bottom: number[] | undefined;
+  right: number[] | undefined;
+} {
   const resolvedStyle: any = {};
 
-  const keys = [
-    'borderTopColor',
-    'borderBottomColor',
-    'borderLeftColor',
-    'borderRightColor',
-  ];
-  for (const styleProp of keys) {
+  for (const styleProp of BORDER_COLOR_STYLES) {
     const color = resolveColor(style, styleProp);
     if (color) resolvedStyle[styleProp] = color;
   }
 
-  if (Object.keys(resolvedStyle).length !== keys.length) {
+  if (Object.keys(resolvedStyle).length !== BORDER_COLOR_STYLES.length) {
     const styleProp = 'borderColor';
     const color = resolveColor(style, styleProp);
     if (color) resolvedStyle[styleProp] = color;
   }
 
   return {
-    top:
-      resolvedStyle.borderTopColor ||
-      resolvedStyle.borderColor ||
-      DEFAULT_COLOR,
-    bottom:
-      resolvedStyle.borderBottomColor ||
-      resolvedStyle.borderColor ||
-      DEFAULT_COLOR,
-    left:
-      resolvedStyle.borderLeftColor ||
-      resolvedStyle.borderColor ||
-      DEFAULT_COLOR,
-    right:
-      resolvedStyle.borderRightColor ||
-      resolvedStyle.borderColor ||
-      DEFAULT_COLOR,
+    top: resolvedStyle.borderTopColor || resolvedStyle.borderColor,
+    bottom: resolvedStyle.borderBottomColor || resolvedStyle.borderColor,
+    left: resolvedStyle.borderLeftColor || resolvedStyle.borderColor,
+    right: resolvedStyle.borderRightColor || resolvedStyle.borderColor,
   };
 }
 
@@ -209,16 +201,38 @@ function resolveBorderStyle(style: any): string {
   return 'single';
 }
 
+const BORDER_WIDTH_STYLES = [
+  'borderTopWidth',
+  'borderLeftWidth',
+  'borderBottomWidth',
+  'borderRightWidth',
+];
+function styleHasBorders(style: any): boolean {
+  for (const styleProp of [
+    ...BORDER_WIDTH_STYLES,
+    'borderWidth',
+    ...BORDER_COLOR_STYLES,
+    'borderColor',
+    'borderStyle',
+  ]) {
+    if (styleProp in style) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function withStyle({ children, style }: any): string {
   const flattenStyle = StyleSheetflattenStyle(style) || {};
   const textAlign = flattenStyle.textAlign || 'left';
   const alignSelf = flattenStyle.alignSelf || 'flex-start';
-  const borderColors = borderColorFromStyle(style);
+  const hasBorders = styleHasBorders(flattenStyle);
+  const borderColors = hasBorders && borderColorFromStyle(style);
 
   const backgroundColor = flattenStyle.backgroundColor
     ? normalizeColor(flattenStyle.backgroundColor)
     : null;
-  const borderStyle = resolveBorderStyle(flattenStyle);
+  const borderStyle = hasBorders && resolveBorderStyle(flattenStyle);
   children = ansiAlign(children, { align: textAlign });
   children = colorizeText(children, flattenStyle);
 
@@ -239,7 +253,7 @@ function withStyle({ children, style }: any): string {
   }
 
   let lines = children.split(NL);
-  const chars = getBorderChars(borderStyle);
+  const chars = getBorderChars(borderStyle || 'single');
 
   const padding = paddingFromStyle(flattenStyle);
   const margin = marginFromStyle(flattenStyle);
@@ -290,24 +304,28 @@ function withStyle({ children, style }: any): string {
   }
 
   const horizontal = chars.horizontal.repeat(contentWidth);
-  const top = colorizeBorder(
-    NL.repeat(margin.top) +
-      marginLeft +
-      chars.topLeft +
-      horizontal +
-      chars.topRight,
-    'top',
-  );
-  const bottom = colorizeBorder(
-    marginLeft +
-      chars.bottomLeft +
-      horizontal +
-      chars.bottomRight +
-      NL.repeat(margin.bottom),
-    'bottom',
-  );
-  const leftSide = colorizeBorder(chars.vertical, 'left');
-  const rightSide = colorizeBorder(chars.vertical, 'right');
+  const top = hasBorders
+    ? colorizeBorder(
+        NL.repeat(margin.top) +
+          marginLeft +
+          chars.topLeft +
+          horizontal +
+          chars.topRight,
+        'top',
+      )
+    : marginLeft;
+  const bottom = hasBorders
+    ? colorizeBorder(
+        marginLeft +
+          chars.bottomLeft +
+          horizontal +
+          chars.bottomRight +
+          NL.repeat(margin.bottom),
+        'bottom',
+      )
+    : marginLeft;
+  const leftSide = hasBorders ? colorizeBorder(chars.vertical, 'left') : '';
+  const rightSide = hasBorders ? colorizeBorder(chars.vertical, 'right') : '';
 
   const middle = lines
     .map((line: string): string => {
