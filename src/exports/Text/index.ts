@@ -7,23 +7,25 @@
  *
  * @flow
  */
+
+// @ts-ignore
+import ansiAlign from 'ansi-align';
 import chalk from 'chalk';
+import cliBoxes from 'cli-boxes';
+// @ts-ignore
+import warning from 'fbjs/lib/warning';
 import { bool } from 'prop-types';
 import React, { Component } from 'react';
 import stringWidth from 'string-width';
-import camelCase from 'camelcase';
-
-import widestLine from 'widest-line';
 import termSize from 'term-size';
-// @ts-ignore
-import ansiAlign from 'ansi-align';
-import cliBoxes from 'cli-boxes';
+import widestLine from 'widest-line';
 
+import normalizeColor from '../../modules/normalizeColor';
+import StyleSheetflattenStyle from '../StyleSheet/flattenStyle';
+
+// @ts-ignore
 // import createElement from '../../components/createElement';
 // @ts-ignore
-import warning from 'fbjs/lib/warning';
-import normalizeColor from '../../modules/normalizeColor';
-
 // import applyLayout from '../../modules/applyLayout';
 // import applyNativeMethods from '../../modules/applyNativeMethods';
 // import arrify from 'arrify';
@@ -33,7 +35,6 @@ import normalizeColor from '../../modules/normalizeColor';
 // @ts-ignore
 // import { StyleSheet } from 'react-native-web';
 
-import StyleSheetflattenStyle from '../StyleSheet/flattenStyle';
 // import StyleSheet from '../StyleSheet';
 // import TextPropTypes from './TextPropTypes';
 function asArray(value: any): string[] {
@@ -100,33 +101,6 @@ const getBorderChars = (
   }
 
   return chararacters;
-};
-
-const isHex = (color: string): boolean =>
-  !!color.match(/^#[0-f]{3}(?:[0-f]{3})?$/i);
-const isColorValid = (color: any): boolean => {
-  if (typeof color === 'string') {
-    return color in chalk || isHex(color);
-  }
-  return false;
-};
-
-// const getColorFn = (color: any): any => {
-//   if (isHex(color)) {
-//     return chalk.hex(color);
-//   }
-
-//   // @ts-ignore
-//   return chalk[color];
-// };
-const getBGColorFn = (color: any): any => {
-  if (isHex(color)) {
-    return chalk.bgHex(color);
-  }
-
-  const tag = camelCase(['bg', color]);
-  // @ts-ignore
-  return chalk[tag];
 };
 
 const colorizeText = (text: any, style: any): string => {
