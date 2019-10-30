@@ -30,6 +30,25 @@ const applyMarginStyles = (node: Yoga.YogaNode, style: any) => {
   );
 };
 
+const applyBorderStyles = (node: Yoga.YogaNode, style: any) => {
+  node.setBorder(
+    Yoga.EDGE_START,
+    style.borderLeft || style.borderX || style.border || 0,
+  );
+  node.setBorder(
+    Yoga.EDGE_END,
+    style.borderRight || style.borderX || style.border || 0,
+  );
+  node.setBorder(
+    Yoga.EDGE_TOP,
+    style.borderTop || style.borderY || style.border || 0,
+  );
+  node.setBorder(
+    Yoga.EDGE_BOTTOM,
+    style.borderBottom || style.borderY || style.border || 0,
+  );
+};
+
 const applyPaddingStyles = (node: Yoga.YogaNode, style: any) => {
   node.setPadding(
     Yoga.EDGE_LEFT,
@@ -151,6 +170,7 @@ export default (node: Yoga.YogaNode, style = {}) => {
   applyPositionStyles(node, style);
   applyMarginStyles(node, style);
   applyPaddingStyles(node, style);
+  applyBorderStyles(node, style);
   applyFlexStyles(node, style);
   applyDimensionStyles(node, style);
 };

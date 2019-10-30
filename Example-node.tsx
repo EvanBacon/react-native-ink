@@ -25,7 +25,12 @@ const InkBoilerplate = ({ name = 'Someone' }) => {
       >
         Hello, {name}. <Text>BRO</Text>
       </Text>
-      <Text style={{ color: 'white' }}>Test Basic</Text>
+      <Text style={{ color: 'white' }}>
+        Test Basic{' '}
+        <Text style={{ color: 'orange', textDecorationStyle: 'underline' }}>
+          nested text
+        </Text>
+      </Text>
     </View>
   );
 };
