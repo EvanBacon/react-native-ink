@@ -67,7 +67,7 @@ class EventEmitter {
       : this._events[type] || [];
   }
 
-  _emit(type: string, args: any[]): boolean {
+  _emit(type: string, args: any[] = []): boolean {
     const handler = this._events[type];
     let ret;
 
@@ -179,10 +179,6 @@ class EventEmitter {
 //   on.listener = listener;
 //   return this._addListener(type, on);
 // };
-
-/**
- * Expose
- */
 
 exports = EventEmitter;
 export { EventEmitter };

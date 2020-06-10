@@ -117,7 +117,7 @@ export function mixColors(c1, c2, alpha) {
   return exports.match([r1, g1, b1]);
 }
 
-export function blend(attr: any, attr2: any, alpha: any): any {
+export function blend(attr: any, attr2?: any, alpha?: any): any {
   let name;
   let i;
   let c;

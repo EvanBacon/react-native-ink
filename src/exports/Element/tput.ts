@@ -32,7 +32,18 @@ import cp from 'child_process';
  */
 
 class Tput {
-  constructor(options = {}) {
+  options: any;
+  terminal: any;
+  debug: any;
+padding: any;
+extended: any;
+printf: any;
+termcap: any;
+error: any;
+terminfoPrefix: any;
+terminfoFile: any;
+termcapFile: any;
+  constructor(options: any = {}) {
     // if (!(this instanceof Tput)) {
     //   return new Tput(options);
     // }

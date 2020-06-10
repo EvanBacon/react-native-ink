@@ -186,7 +186,7 @@ export default class ScrollableBox extends Box {
   _isList: any;
   items: any;
 
-  _scrollBottom() {
+  _scrollBottom(): number {
     if (!this.scrollable) return 0;
 
     // We could just calculate the children, but we can

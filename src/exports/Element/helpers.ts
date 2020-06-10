@@ -47,7 +47,7 @@ helpers.asort = (obj: any): any =>
 helpers.hsort = (obj: any) => obj.sort(({ index }, { index }) => index - index);
 
 helpers.findFile = (start: any, target: any): any =>
-  (function read(dir) {
+  (function read(dir: string): null | any {
     let files: string[];
     let file;
     let stat;

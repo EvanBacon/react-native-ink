@@ -386,6 +386,7 @@ class Program extends EventEmitter {
         }
 
         if (key.name === 'return' && key.sequence === '\r') {
+          // @ts-ignore
           self.input.emit('keypress', ch, merge({}, key, { name: 'enter' }));
         }
 
@@ -398,8 +399,11 @@ class Program extends EventEmitter {
         key.full = name;
 
         Program.instances.forEach(program => {
+          // @ts-ignore
           if (program.input !== self.input) return;
+          // @ts-ignore
           program.emit('keypress', ch, key);
+          // @ts-ignore
           program.emit(`key ${name}`, ch, key);
         });
       }),
@@ -409,7 +413,9 @@ class Program extends EventEmitter {
       'data',
       (this.input._dataHandler = data => {
         Program.instances.forEach(program => {
+          // @ts-ignore
           if (program.input !== self.input) return;
+          // @ts-ignore
           program.emit('data', data);
         });
       }),
@@ -430,9 +436,13 @@ class Program extends EventEmitter {
     // Output
     function resize() {
       Program.instances.forEach(program => {
+        // @ts-ignore
         if (program.output !== self.output) return;
+        // @ts-ignore
         program.cols = program.output.columns;
+        // @ts-ignore
         program.rows = program.output.rows;
+        // @ts-ignore
         program.emit('resize');
       });
     }
@@ -440,7 +450,7 @@ class Program extends EventEmitter {
     this.output.on(
       'resize',
       (this.output._resizeHandler = () => {
-        Program.instances.forEach(program => {
+        Program.instances.forEach((program: any) => {
           if (program.output !== self.output) return;
           if (!program.options.resizeTimeout) {
             return resize();
@@ -459,7 +469,12 @@ class Program extends EventEmitter {
     );
   }
 
+  _exiting: any;
+
+  static _exitHandler: any;
+
   destroy() {
+    // @ts-ignore
     const index = Program.instances.indexOf(this);
 
     if (~index) {
@@ -512,6 +527,10 @@ class Program extends EventEmitter {
     }
   }
 
+  destroyed: boolean = false;
+
+  _newHandler: any;
+
   key(key: any, listener: Function) {
     if (typeof key === 'string') key = key.split(/\s*,\s*/);
     key.forEach(function(key: string) {
@@ -563,6 +582,7 @@ class Program extends EventEmitter {
     });
   }
 
+  _lastButton: any;
   _bindMouse(s: any, buf: any) {
     const self = this;
     let key;
@@ -1641,8 +1661,8 @@ class Program extends EventEmitter {
     );
 
     var timeout = setTimeout(() => {
-      self.removeListener(name, onresponse);
-      return callback(new Error('Timeout.'));
+      self.removeListener(name!, onresponse);
+      return callback!(new Error('Timeout.'));
     }, 2000);
 
     return noBypass ? this._write(text!) : this._twrite(text);
@@ -1666,6 +1686,8 @@ class Program extends EventEmitter {
 
     return true;
   }
+
+  _flush: any;
 
   _buf: any;
   ret: any;
@@ -1792,6 +1814,7 @@ class Program extends EventEmitter {
   }
 
   simpleInsert(ch: string, i: number, attr: any): any {
+    // @ts-ignore
     return this._write(this.repeat(ch, i), attr);
   }
 

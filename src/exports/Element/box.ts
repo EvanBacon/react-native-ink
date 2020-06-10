@@ -9,7 +9,6 @@ class Box extends Element {
   type = 'box';
   constructor(options = {}) {
     // if (!(this instanceof Node)) return new Box(options);
-
     super(options);
   }
 }

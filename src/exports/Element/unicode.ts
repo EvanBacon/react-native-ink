@@ -654,13 +654,16 @@ export function fromCodePoint(...args: any[]) {
     }
     if (codePoint <= 0xffff) {
       // BMP code point
+      // @ts-ignore
       codeUnits.push(codePoint);
     } else {
       // Astral code point; split in surrogate halves
       // http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
       codePoint -= 0x10000;
       highSurrogate = (codePoint >> 10) + 0xd800;
+      // @ts-ignore
       lowSurrogate = (codePoint % 0x400) + 0xdc00;
+      // @ts-ignore
       codeUnits.push(highSurrogate, lowSurrogate);
     }
     if (index + 1 === length || codeUnits.length > MAX_SIZE) {

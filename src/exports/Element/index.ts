@@ -15,6 +15,7 @@ const nextTick = global.setImmediate || process.nextTick.bind(process);
 
 export default class Element extends Node {
   type = 'element';
+  _isLabel: boolean = false;
   _clines: any;
   position: any;
   screen: any;
@@ -25,6 +26,9 @@ export default class Element extends Node {
   wrap: any;
   shrink: any;
   padding: any;
+  childBase: any;
+  scrollable: any;
+  _isList: boolean = false;
 
   get width() {
     return this._getWidth(false);
@@ -80,7 +84,7 @@ export default class Element extends Node {
     if (/^\d+$/.test(val)) val = +val;
     this.emit('resize');
     this.clearPos();
-    this.position.width = val
+    this.position.width = val;
   }
 
   set height(val) {
@@ -88,7 +92,7 @@ export default class Element extends Node {
     if (/^\d+$/.test(val)) val = +val;
     this.emit('resize');
     this.clearPos();
-    this.position.height = val
+    this.position.height = val;
   }
 
   set aleft(val) {
@@ -109,7 +113,7 @@ export default class Element extends Node {
     if (this.position.left === val) return;
     this.emit('move');
     this.clearPos();
-    this.position.left = val
+    this.position.left = val;
   }
 
   set aright(val) {
@@ -117,7 +121,7 @@ export default class Element extends Node {
     if (this.position.right === val) return;
     this.emit('move');
     this.clearPos();
-    this.position.right = val
+    this.position.right = val;
   }
 
   set atop(val) {
@@ -127,8 +131,10 @@ export default class Element extends Node {
         val = (this.screen.height / 2) | 0;
         val -= (this.height / 2) | 0;
       } else {
+        // @ts-ignore
         expr = val.split(/(?=\+|-)/);
         val = expr[0];
+        // @ts-ignore
         val = +val.slice(0, -1) / 100;
         val = (this.screen.height * val) | 0;
         val += +(expr[1] || 0);
@@ -138,7 +144,7 @@ export default class Element extends Node {
     if (this.position.top === val) return;
     this.emit('move');
     this.clearPos();
-    this.position.top = val
+    this.position.top = val;
   }
 
   set abottom(val) {
@@ -146,7 +152,7 @@ export default class Element extends Node {
     if (this.position.bottom === val) return;
     this.emit('move');
     this.clearPos();
-    this.position.bottom = val
+    this.position.bottom = val;
   }
 
   set rleft(val) {
@@ -154,14 +160,14 @@ export default class Element extends Node {
     if (/^\d+$/.test(val as any)) val = +val;
     this.emit('move');
     this.clearPos();
-    this.position.left = val
+    this.position.left = val;
   }
 
   set rright(val) {
     if (this.position.right === val) return;
     this.emit('move');
     this.clearPos();
-    this.position.right = val
+    this.position.right = val;
   }
 
   set rtop(val) {
@@ -169,14 +175,14 @@ export default class Element extends Node {
     if (/^\d+$/.test(val as any)) val = +val;
     this.emit('move');
     this.clearPos();
-    this.position.top = val
+    this.position.top = val;
   }
 
   set rbottom(val) {
     if (this.position.bottom === val) return;
     this.emit('move');
     this.clearPos();
-    this.position.bottom = val
+    this.position.bottom = val;
   }
 
   get ileft() {
@@ -243,19 +249,19 @@ export default class Element extends Node {
   }
 
   set left(val) {
-    (this.rleft = val);
+    this.rleft = val;
   }
 
   set right(val) {
-     (this.rright = val);
+    this.rright = val;
   }
 
   set top(val) {
-     (this.rtop = val);
+    this.rtop = val;
   }
 
   set bottom(val) {
-     (this.rbottom = val);
+    this.rbottom = val;
   }
 
   get focused() {
@@ -283,7 +289,6 @@ export default class Element extends Node {
   }
 
   _ignore: boolean = false;
-  
 
   _draggable: boolean = false;
   get draggable() {
@@ -318,10 +323,10 @@ export default class Element extends Node {
       ) {
         if (key === 'type') return;
         Object.defineProperty(
-            // @ts-ignore
-            this,
-            key,
-            // @ts-ignore
+          // @ts-ignore
+          this,
+          key,
+          // @ts-ignore
           Object.getOwnPropertyDescriptor(ScrollableBox.prototype, key),
         );
       },
@@ -332,7 +337,6 @@ export default class Element extends Node {
       return this;
     }
 
-    
     const self = this;
 
     this.name = options.name;
@@ -450,16 +454,18 @@ export default class Element extends Node {
     this.on('newListener', function fn(type: string) {
       // type = type.split(' ').slice(1).join(' ');
       if (
-        type === 'mouse' ||
-        type === 'click' ||
-        type === 'mouseover' ||
-        type === 'mouseout' ||
-        type === 'mousedown' ||
-        type === 'mouseup' ||
-        type === 'mousewheel' ||
-        type === 'wheeldown' ||
-        type === 'wheelup' ||
-        type === 'mousemove'
+        [
+          'mouse',
+          'click',
+          'mouseover',
+          'mouseout',
+          'mousedown',
+          'mouseup',
+          'mousewheel',
+          'wheeldown',
+          'wheelup',
+          'mousemove',
+        ].includes(type)
       ) {
         self.screen._listenMouse(self);
       } else if (type === 'keypress' || type.indexOf('key ') === 0) {
@@ -516,10 +522,10 @@ export default class Element extends Node {
       this.focus();
     }
   }
+
   lpos: any;
 
-
-  sattr(style: any, fg: any, bg: any) {
+  sattr(style: any, fg?: any, bg?: any) {
     let bold = style.bold;
     let underline = style.underline;
     let blink = style.blink;
@@ -556,6 +562,8 @@ export default class Element extends Node {
     );
   }
 
+  _slisteners: any;
+
   onScreenEvent(type: string, handler: Function) {
     const listeners = (this._slisteners = this._slisteners || []);
     listeners.push({ type, handler });
@@ -569,6 +577,7 @@ export default class Element extends Node {
     this.screen.once(type, function(...args) {
       const i = listeners.indexOf(entry);
       if (~i) listeners.splice(i, 1);
+      // @ts-ignore
       return handler.apply(this, args);
     });
   }
@@ -621,7 +630,7 @@ export default class Element extends Node {
     return (this.screen.focused = this);
   }
 
-  setContent(content: any, noClear?: any, noTags?:any) {
+  setContent(content: any, noClear?: any, noTags?: any) {
     if (!noClear) this.clearPos();
     this.content = content || '';
     this.parseContent(noTags);
@@ -644,7 +653,7 @@ export default class Element extends Node {
 
   content: any;
 
-  parseContent(noTags?:any) {
+  parseContent(noTags?: any) {
     if (this.detached) return false;
 
     const width = this.width - this.iwidth;
@@ -709,6 +718,8 @@ export default class Element extends Node {
 
     return false;
   }
+
+  _pcontent: string | undefined;
 
   // Convert `{red-fg}foo{/red-fg}` to `\x1b[31mfoo\x1b[39m`.
   _parseTags(text) {
@@ -819,20 +830,18 @@ export default class Element extends Node {
   _parseAttr(lines) {
     const dattr = this.sattr(this.style);
     let attr = dattr;
-    const attrs = [];
+    const attrs: any[] = [];
     let line;
-    let i;
-    let j;
     let c;
 
     if (lines[0].attr === attr) {
       return;
     }
 
-    for (j = 0; j < lines.length; j++) {
+    for (let j = 0; j < lines.length; j++) {
       line = lines[j];
       attrs[j] = attr;
-      for (i = 0; i < line.length; i++) {
+      for (let i = 0; i < line.length; i++) {
         if (line[i] === '\x1b') {
           if ((c = /^\x1b\[[\d;]*m/.exec(line.substring(i)))) {
             attr = this.screen.attrCode(c[0], attr, dattr);
@@ -853,7 +862,7 @@ export default class Element extends Node {
     const cline = line.replace(/\x1b\[[\d;]*m/g, '');
 
     const len = cline.length;
-    let s = width - len;
+    let s: number | string = width - len;
 
     if (this.shrink) {
       s = 0;
@@ -879,14 +888,16 @@ export default class Element extends Node {
     return line;
   }
 
-  _wrapContent(content, width) {
+  scrollbar: any;
+
+  _wrapContent(content: any, width: number) {
     const tags = this.parseTags;
     let state = this.align;
     const wrap = this.wrap;
     let margin = 0;
-    const rtof = [];
-    const ftor = [];
-    const out = [];
+    const rtof: any[] = [];
+    const ftor: any[] = [];
+    const out: any = [];
     let no = 0;
     let line;
     let align;
@@ -895,10 +906,9 @@ export default class Element extends Node {
     let i;
     let part;
     let j;
-    let lines;
     let rest;
 
-    lines = content.split('\n');
+    const lines = content.split('\n');
 
     if (!content) {
       out.push(content);
@@ -1055,6 +1065,9 @@ export default class Element extends Node {
     this.screen._listenKeys(this);
   }
 
+  _dragM: any;
+  _dragMD: any;
+
   enableDrag(verify) {
     const self = this;
 
@@ -1126,6 +1139,8 @@ export default class Element extends Node {
     return (this._draggable = true);
   }
 
+  _drag: any;
+
   disableDrag() {
     if (!this._draggable) return false;
     delete this.screen._dragging;
@@ -1176,7 +1191,6 @@ export default class Element extends Node {
   }
 
   setLabel(options) {
-    const self = this;
     const Box = require('./box');
 
     if (typeof options === 'string') {
@@ -1212,26 +1226,26 @@ export default class Element extends Node {
     });
 
     if (options.side !== 'right') {
-      this._label.rleft = 2 - this.ileft;
+      this._label!.rleft = 2 - this.ileft;
     } else {
-      this._label.rright = 2 - this.iright;
+      this._label!.rright = 2 - this.iright;
     }
 
-    this._label._isLabel = true;
+    this._label!._isLabel = true;
 
     if (!this.screen.autoPadding) {
       if (options.side !== 'right') {
-        this._label.rleft = 2;
+        this._label!.rleft = 2;
       } else {
-        this._label.rright = 2;
+        this._label!.rright = 2;
       }
-      this._label.rtop = 0;
+      this._label!.rtop = 0;
     }
 
     const reposition = () => {
-      this._label.rtop = (this.childBase || 0) - this.itop;
+      this._label!.rtop = (this.childBase || 0) - this.itop;
       if (!this.screen.autoPadding) {
-        this._label.rtop = this.childBase || 0;
+        this._label!.rtop = this.childBase || 0;
       }
       this.screen.render();
     };
@@ -1665,6 +1679,8 @@ export default class Element extends Node {
     return { xi, xl, yi, yl };
   }
 
+  items: any[] = [];
+
   _getShrinkContent(xi, xl, yi, yl) {
     const h = this._clines.length;
     const w = this._clines.mwidth || 1;
@@ -1697,6 +1713,7 @@ export default class Element extends Node {
 
   _getShrink(xi, xl, yi, yl, get) {
     const shrinkBox = this._getShrinkBox(xi, xl, yi, yl, get);
+    // @ts-ignore
     const shrinkContent = this._getShrinkContent(xi, xl, yi, yl, get);
     let xll = xl;
     let yll = yl;
@@ -1734,8 +1751,6 @@ export default class Element extends Node {
     return { xi, xl, yi, yl };
   }
 
-  childBase: any;
-  
   _getCoords(get?: any, noscroll?: any) {
     if (this.hidden) return;
 
@@ -1933,7 +1948,7 @@ export default class Element extends Node {
     let cell;
     let attr;
     let ch;
-    const content = this._pcontent;
+    const content = this._pcontent!;
     let ci = this._clines.ci[coords.base];
     let battr;
     let dattr;
@@ -1968,7 +1983,7 @@ export default class Element extends Node {
     // }
 
     if (coords.base >= this._clines.ci.length) {
-      ci = this._pcontent.length;
+      ci = this._pcontent!.length;
     }
 
     this.lpos = coords;
@@ -2117,7 +2132,7 @@ export default class Element extends Node {
         }
 
         if (this.screen.fullUnicode && content[ci - 1]) {
-          const point = unicode.codePointAt(content, ci - 1);
+          const point = unicode.codePointAt(content, ci - 1)!;
           // Handle combining chars:
           // Make sure they get in the same cell and are counted as 0.
           if (unicode.combining[point]) {
@@ -2141,6 +2156,7 @@ export default class Element extends Node {
           }
         }
 
+        // @ts-ignore
         if (this._noFill) continue;
 
         if (this.style.transparent) {
@@ -2159,25 +2175,31 @@ export default class Element extends Node {
 
     // Draw the scrollbar.
     // Could possibly draw this after all child elements.
-    if (this.scrollbar) {
+    // @ts-ignore
+    if (this.scrollbar && this._scrollBottom) {
       // XXX
       // i = this.getScrollHeight();
+      // @ts-ignore
       i = Math.max(this._clines.length, this._scrollBottom());
     }
     if (coords.notop || coords.nobot) i = -Infinity;
     if (this.scrollbar && yl - yi < i) {
       x = xl - 1;
       if (this.scrollbar.ignoreBorder && this.border) x++;
+      // @ts-ignore
       if (this.alwaysScroll) {
         y = this.childBase / (i - (yl - yi));
       } else {
+        // @ts-ignore
         y = (this.childBase + this.childOffset) / (i - 1);
       }
       y = yi + (((yl - yi) * y) | 0);
       if (y >= yl) y = yl - 1;
       cell = lines[y] && lines[y][x];
       if (cell) {
+        // @ts-ignore
         if (this.track) {
+          // @ts-ignore
           ch = this.track.ch || ' ';
           attr = this.sattr(
             this.style.track,
@@ -2422,13 +2444,14 @@ export default class Element extends Node {
    * Content Methods
    */
 
-  insertLine(i, line) {
+  insertLine(i: string | string[], line) {
     if (typeof line === 'string') line = line.split('\n');
 
     if (i !== i || i == null) {
       i = this._clines.ftor.length;
     }
 
+    // @ts-ignore
     i = Math.max(i, 0);
 
     while (this._clines.fake.length < i) {
@@ -2448,10 +2471,12 @@ export default class Element extends Node {
       real = this._clines.ftor[this._clines.ftor.length - 1];
       real = real[real.length - 1] + 1;
     } else {
+      // @ts-ignore
       real = this._clines.ftor[i][0];
     }
 
     for (let j = 0; j < line.length; j++) {
+      // @ts-ignore
       this._clines.fake.splice(i + j, 0, line[j]);
     }
 
@@ -2541,12 +2566,13 @@ export default class Element extends Node {
     return this.insertLine(fake, line);
   }
 
-  deleteTop(n) {
+  deleteTop(n?: number | string) {
     const fake = this._clines.rtof[this.childBase || 0];
+    // @ts-ignore
     return this.deleteLine(fake, n);
   }
 
-  deleteBottom(n) {
+  deleteBottom(n?: number) {
     const h = (this.childBase || 0) + this.height - 1 - this.iheight;
     const i = Math.min(h, this._clines.length - 1);
     const fake = this._clines.rtof[i];
@@ -2556,7 +2582,7 @@ export default class Element extends Node {
     return this.deleteLine(fake - (n - 1), n);
   }
 
-  setLine(i: number, line: number) {
+  setLine(i: number, line: number | string) {
     i = Math.max(i, 0);
     while (this._clines.fake.length < i) {
       this._clines.fake.push('');
@@ -2592,10 +2618,11 @@ export default class Element extends Node {
   }
 
   unshiftLine(line: any) {
+    // @ts-ignore
     return this.insertLine(0, line);
   }
 
-  shiftLine(n: number) {
+  shiftLine(n?: number) {
     return this.deleteLine(0, n);
   }
 
@@ -2604,7 +2631,7 @@ export default class Element extends Node {
     return this.insertLine(this._clines.fake.length, line);
   }
 
-  popLine(n: any) {
+  popLine(n?: any) {
     return this.deleteLine(this._clines.fake.length - 1, n);
   }
 
@@ -2617,10 +2644,11 @@ export default class Element extends Node {
   }
 
   strWidth(text: any) {
+    // @ts-ignore
     text = this.parseTags ? helpers.stripTags(text) : text;
     return this.screen.fullUnicode
       ? unicode.strWidth(text)
-      : helpers.dropUnicode(text).length;
+      : (helpers as any).dropUnicode(text).length;
   }
 
   screenshot(xi, xl, yi, yl) {
@@ -2648,7 +2676,7 @@ export default class Element extends Node {
   }
 
   _render(...args: any[]) {
-      // @ts-ignore
+    // @ts-ignore
     return this.render(...args);
   }
 }
